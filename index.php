@@ -1,4 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body>
 <?php
+$server = 'localhost';
+$user = 'root';
+$db = 'exercice194';
+$password = '';
+
+try {
+    $conn = new PDO("mysql:host=$server;dbname=$db;charset=utf8;", $user, $password);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+
+}
+
+catch (PDOException $e) {
+    die($e->getMessage());
+}
+
+//point 1
+$stmt = $conn->prepare("SELECT * FROM user WHERE nom = 'Conor'");
+$state = $stmt->execute();
+if ($state) {
+    $result = $stmt->fetchAll();
+    foreach ($result as $ligne) {
+        echo "<div class='utilisateur'>";
+        echo "<p>" . $ligne['nom'] . "</p>";
+        echo "</div>";
+    }
+}
+
+$stmt = $conn->prepare("SELECT * FROM user WHERE prenom != 'Joe'");
+$state = $stmt->execute();
+if ($state) {
+    $result = $stmt->fetchAll();
+    foreach ($result as $ligne) {
+        echo "<div class='utilisateur'>";
+        echo "<p>" . $ligne['prenom'] ."</p>";
+        echo "</div>";
+    }
+}
+
+$stmt = $conn->prepare("SELECT * FROM user WHERE id <= 2");
+$state = $stmt->execute();
+if ($state) {
+    $result = $stmt->fetchAll();
+    foreach ($result as $ligne) {
+        echo "<div class='utilisateur'>";
+        echo "<p>" . $ligne['nom'] ."</p>";
+        echo "</div>";
+    }
+}
+
+$stmt = $conn->prepare("SELECT * FROM user WHERE id >= 2");
+$state = $stmt->execute();
+if ($state) {
+    $result = $stmt->fetchAll();
+    foreach ($result as $ligne) {
+        echo "<div class='utilisateur'>";
+        echo "<p>" . $ligne['nom'] ."</p>";
+        echo "</div>";
+    }
+}
+
+$stmt = $conn->prepare("SELECT * FROM user WHERE id = 1");
+$state = $stmt->execute();
+if ($state) {
+    $result = $stmt->fetchAll();
+    foreach ($result as $ligne) {
+        echo "<div class='utilisateur'>";
+        echo "<p>" . $ligne['nom'] ."</p>";
+        echo "</div>";
+    }
+}
+
+$stmt = $conn->prepare("SELECT * FROM user WHERE id > 1 AND nom = 'Doe'");
+$state = $stmt->execute();
+if ($state) {
+    $result = $stmt->fetchAll();
+    foreach ($result as $ligne) {
+        echo "<div class='utilisateur'>";
+        echo "<p>" . $ligne['nom'] ."</p>";
+        echo "</div>";
+    }
+}
+
+$stmt = $conn->prepare("SELECT * FROM user WHERE nom = 'Doe' AND prenom = 'John'");
+$state = $stmt->execute();
+if ($state) {
+    $result = $stmt->fetchAll();
+    foreach ($result as $ligne) {
+        echo "<div class='utilisateur'>";
+        echo "<p>" . $ligne['nom'] ."</p>";
+        echo "<p>" . $ligne['prenom'] ."</p>";
+        echo "</div>";
+    }
+}
+
+$stmt = $conn->prepare("SELECT * FROM user WHERE nom = 'Doe' OR prenom = 'Jane'");
+$state = $stmt->execute();
+if ($state) {
+    $result = $stmt->fetchAll();
+    foreach ($result as $ligne) {
+        echo "<div class='utilisateur'>";
+        echo "<p>" . $ligne['nom'] ."</p>";
+        echo "<p>" . $ligne['prenom'] ."</p>";
+        echo "</div>";
+    }
+}
+
+$stmt = $conn->prepare("SELECT * FROM user LIMIT 2");
+$state = $stmt->execute();
+if ($state) {
+    $result = $stmt->fetchAll();
+    foreach ($result as $ligne) {
+        echo "<div class='utilisateur'>";
+        echo "<p>" . $ligne['nom'] ."</p>";
+        echo "<p>" . $ligne['prenom'] ."</p>";
+        echo "</div>";
+    }
+}
+
+$stmt = $conn->prepare("SELECT * FROM user ORDER BY id ASC LIMIT 1");
+$state = $stmt->execute();
+if ($state) {
+    $result = $stmt->fetchAll();
+    foreach ($result as $ligne) {
+        echo "<div class='utilisateur'>";
+        echo "<p>" . $ligne['nom'] ."</p>";
+        echo "<p>" . $ligne['prenom'] ."</p>";
+        echo "</div>";
+    }
+}
+//* 11. Sélectionnez et affichez tous les utilisateurs dont le nom commence par C, fini par r et contient 5 caractères ( voir LIKE )*/
+
+$stmt = $conn->prepare("SELECT * FROM user WHERE nom LIKE 'C___r' ");
+$state = $stmt->execute();
+if ($state) {
+    $result = $stmt->fetchAll();
+    foreach ($result as $ligne) {
+        echo "<div class='utilisateur'>";
+        echo "<p>" . $ligne['nom'] ."</p>";
+        echo "</div>";
+    }
+}
+
+
+/* 12. Sélectionnez et affichez tous les utilisateurs dont le nom contient au moins un 'e' */
+$stmt = $conn->prepare("SELECT * FROM user WHERE nom LIKE '%e%' ");
+$state = $stmt->execute();
+if ($state) {
+    $result = $stmt->fetchAll();
+    foreach ($result as $ligne) {
+        echo "<div class='utilisateur'>";
+        echo "<p>" . $ligne['nom'] ."</p>";
+        echo "</div>";
+    }
+}
+
+/* 13. Sélectionnez et affichez tous les utilisateurs dont le prénom est ( IN ) (John, Sarah) ... voir IN , pas OR '' */
+
+$stmt = $conn->prepare("SELECT * FROM user WHERE prenom IN ('John', 'Sarah') ");
+$state = $stmt->execute();
+if ($state) {
+    $result = $stmt->fetchAll();
+    foreach ($result as $ligne) {
+        echo "<div class='utilisateur'>";
+        echo "<p>" . $ligne['prenom'] ."</p>";
+        echo "</div>";
+    }
+}
+
+/* 14. Sélectionnez et affichez tous les utilisateurs dont l'id est situé entre 2 et 4 */
+
+$stmt = $conn->prepare("SELECT * FROM user WHERE id BETWEEN 2 AND 4 ");
+$state = $stmt->execute();
+if ($state) {
+    $result = $stmt->fetchAll();
+    foreach ($result as $ligne) {
+        echo "<div class='utilisateur'>";
+        echo "<p>" . $ligne['prenom'] ."</p>";
+        echo "</div>";
+    }
+}
+
+?>
+</body>
+</html>
+<?php
+
 
 /**
  * Utilisez la base de données que vous avez utilisé dans l'exo 194.
